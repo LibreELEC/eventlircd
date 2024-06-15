@@ -1314,12 +1314,13 @@ static int input_device_add(struct udev_device *udev_device)
 		"/dev/misc/uinput",
 		NULL
 	};
-	const char* name;
+	const char* name = NULL;
 	const char* path;
 	const char* enable;
 	const char* evmap_file;
 	const char* remote;
 	struct input_device *device;
+	struct udev_device *parent;
 	unsigned long bit[BITFIELD_LONGS_PER_ARRAY(EV_MAX)];
 	unsigned long bit_key[BITFIELD_LONGS_PER_ARRAY(KEY_MAX)];
 	unsigned long bit_rel[BITFIELD_LONGS_PER_ARRAY(REL_MAX)];
@@ -1344,9 +1345,9 @@ static int input_device_add(struct udev_device *udev_device)
 		return -1;
 	}
 
-	name = udev_device_get_parent(udev_device);
-	if (name)
-	  name = udev_device_get_property_value(name, "NAME");
+	parent = udev_device_get_parent(udev_device);
+	if (parent)
+	  name = udev_device_get_property_value(parent, "NAME");
 	if ((name != NULL) && (strncmp(name, "\"eventlircd\"", strlen("\"eventlircd\"")) == 0)) {
 		return 0;
 	}

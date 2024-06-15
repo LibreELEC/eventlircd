@@ -1344,7 +1344,9 @@ static int input_device_add(struct udev_device *udev_device)
 		return -1;
 	}
 
-	name = udev_device_get_property_value(udev_device_get_parent(udev_device), "NAME");
+	name = udev_device_get_parent(udev_device);
+	if (name)
+	  name = udev_device_get_property_value(name, "NAME");
 	if ((name != NULL) && (strncmp(name, "\"eventlircd\"", strlen("\"eventlircd\"")) == 0)) {
 		return 0;
 	}
